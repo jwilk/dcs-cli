@@ -87,6 +87,7 @@ def send_query(options, query):
             query_id = msg['QueryId']
             n_results = msg['Results']
             colors.print('Results: {n}', n=n_results)
+            sys.stdout.flush()
             if n_results == 0:
                 break
             packages = wget_json(query_id, 'packages')['Packages']
@@ -95,6 +96,7 @@ def send_query(options, query):
                 pkgs=' '.join(packages),
             )
             print()
+            sys.stdout.flush()
             for n in range(n_pages):
                 data = wget_json(query_id, 'page_{n}'.format(n=n))
                 print_results(data)
@@ -127,6 +129,7 @@ def print_results(items):
             rank=item['ranking'],
         )
         print()
+        sys.stdout.flush()
 
 __all__ = ['main']
 
