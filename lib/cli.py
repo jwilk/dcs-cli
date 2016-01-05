@@ -32,8 +32,8 @@ import urllib.parse
 import urllib.request
 import websocket
 
-import lib.colors
-import lib.pager
+from lib import colors
+from lib import pager
 
 host = 'codesearch.debian.net'
 user_agent = 'dcs-cli (https://github.com/jwilk/dcs-cli)'
@@ -49,7 +49,7 @@ def main():
         query = r'\b{query}\b'.format(query=query)
     if options.ignore_case:
         query = '(?i)' + query
-    with lib.pager.autopager():
+    with pager.autopager():
         send_query(options, query)
 
 def wget_json(query_id, s):
@@ -66,7 +66,7 @@ def wget_json(query_id, s):
     return data
 
 def send_query(options, query):
-    lib.colors.print('Query: {t.bold}{q}{t.off}', q=query)
+    colors.print('Query: {t.bold}{q}{t.off}', q=query)
     sys.stdout.flush()
     query = dict(Query=('q=' + urllib.parse.quote(query)))
     query = json.dumps(query)
@@ -85,9 +85,9 @@ def send_query(options, query):
             if msg['FilesProcessed'] != msg['FilesTotal']:
                 continue
             query_id = msg['QueryId']
-            lib.colors.print('Results: {n}', n=msg['Results'])
+            colors.print('Results: {n}', n=msg['Results'])
             packages = wget_json(query_id, 'packages')['Packages']
-            lib.colors.print('Packages: {n} ({pkgs})',
+            colors.print('Packages: {n} ({pkgs})',
                 n=len(packages),
                 pkgs=' '.join(packages),
             )
@@ -110,16 +110,16 @@ def send_query(options, query):
 
 def print_results(items):
     for item in items:
-        lib.colors.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
+        colors.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
         for line in item['ctxp2'], item['ctxp1']:
             line = html.unescape(line)
-            lib.colors.print('{t.dim}|{t.off} {line}', line=line)
+            colors.print('{t.dim}|{t.off} {line}', line=line)
         line = html.unescape(item['context'])
-        lib.colors.print('{t.dim}>{t.off} {t.bold}{line}{t.off}', line=line)
+        colors.print('{t.dim}>{t.off} {t.bold}{line}{t.off}', line=line)
         for line in item['ctxn1'], item['ctxn2']:
             line = html.unescape(line)
-            lib.colors.print('{t.dim}|{t.off} {line}', line=line)
-        lib.colors.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
+            colors.print('{t.dim}|{t.off} {line}', line=line)
+        colors.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
             pathrank=item['pathrank'],
             rank=item['ranking'],
         )
