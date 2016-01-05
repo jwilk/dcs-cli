@@ -28,6 +28,7 @@ import argparse
 import html
 import json
 import sys
+import time
 import urllib.parse
 import urllib.request
 import websocket
@@ -42,8 +43,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true')
     ap.add_argument('--word-regexp', '-w', action='store_true')
+    ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
     options = ap.parse_args()
+    options.delay /= 1000
     query = options.query
     if options.word_regexp:
         query = r'\b{query}\b'.format(query=query)
@@ -91,6 +94,7 @@ def send_query(options, query):
             if n_results == 0:
                 break
             packages = wget_json(query_id, 'packages')['Packages']
+            ts = time.time()
             colors.print('Packages: {n} ({pkgs})',
                 n=len(packages),
                 pkgs=' '.join(packages),
@@ -98,6 +102,11 @@ def send_query(options, query):
             print()
             sys.stdout.flush()
             for n in range(n_pages):
+                new_ts = time.time()
+                td = new_ts - ts
+                if td < options.delay:
+                    time.sleep(options.delay - td)
+                ts = new_ts
                 data = wget_json(query_id, 'page_{n}'.format(n=n))
                 print_results(data)
             break
