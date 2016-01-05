@@ -85,7 +85,10 @@ def send_query(options, query):
             if msg['FilesProcessed'] != msg['FilesTotal']:
                 continue
             query_id = msg['QueryId']
-            colors.print('Results: {n}', n=msg['Results'])
+            n_results = msg['Results']
+            colors.print('Results: {n}', n=n_results)
+            if n_results == 0:
+                break
             packages = wget_json(query_id, 'packages')['Packages']
             colors.print('Packages: {n} ({pkgs})',
                 n=len(packages),
