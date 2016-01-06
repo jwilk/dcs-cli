@@ -116,6 +116,9 @@ def send_query(options, query):
             if msg['ErrorType'] == 'invalidquery':
                 print('DCS error: invalid query')
                 sys.exit(1)
+            elif msg['ErrorType'] == 'backendunavailable':
+                print('DCS error: backend server is not available')
+                sys.exit(1)
             raise NotImplementedError(msg)
         elif tp == 'default':
             continue
