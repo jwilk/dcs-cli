@@ -114,10 +114,10 @@ def send_query(options, query):
             n_pages = msg['ResultPages']
         elif tp == 'error':
             if msg['ErrorType'] == 'invalidquery':
-                print('DCS error: invalid query')
+                print('DCS error: invalid query', file=sys.stderr)
                 sys.exit(1)
             elif msg['ErrorType'] == 'backendunavailable':
-                print('DCS error: backend server is not available')
+                print('DCS error: backend server is not available', file=sys.stderr)
                 sys.exit(1)
             raise NotImplementedError(msg)
         elif tp == 'default':
