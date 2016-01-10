@@ -27,6 +27,7 @@ command-line interface
 import argparse
 import html
 import json
+import re
 import sys
 import time
 import urllib.parse
@@ -39,19 +40,44 @@ from lib import pager
 host = 'codesearch.debian.net'
 user_agent = 'dcs-cli (https://github.com/jwilk/dcs-cli)'
 
+keyword_types = {
+    'filetype',
+    'package',
+    'pkg',
+    'path',
+}
+
+is_keyword = re.compile(
+    '^-?(?:{0}):'.format('|'.join(keyword_types))
+).match
+
+def lsplit(pred, lst):
+    lyes = []
+    lno = []
+    for item in lst:
+        if pred(item):
+            lyes += [item]
+        else:
+            lno += [item]
+    return (lyes, lno)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true')
     ap.add_argument('--word-regexp', '-w', action='store_true')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
+    ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
     options = ap.parse_args()
     options.delay /= 1000
-    query = options.query
+    query = [options.query] + options.query_tail
+    [keywords, query] = lsplit(is_keyword, query)
+    query = ' '.join(query)
     if options.word_regexp:
         query = r'\b{query}\b'.format(query=query)
     if options.ignore_case:
         query = '(?i)' + query
+    query = ' '.join([query] + keywords)
     with pager.autopager():
         send_query(options, query)
 
