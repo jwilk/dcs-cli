@@ -66,6 +66,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true')
     ap.add_argument('--word-regexp', '-w', action='store_true')
+    ap.add_argument('--fixed-string', '-F', action='store_true')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
@@ -74,6 +75,8 @@ def main():
     query = [options.query] + options.query_tail
     [keywords, query] = lsplit(is_keyword, query)
     query = ' '.join(query)
+    if options.fixed_string:
+        query = re.escape(query)
     if options.word_regexp:
         query = r'\b{query}\b'.format(query=query)
     if options.ignore_case:
