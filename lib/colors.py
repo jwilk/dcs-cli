@@ -29,6 +29,7 @@ class _seq:
     dim = '\x1b[1;30m'
     off = '\x1b[0m'
     bold = '\x1b[1m'
+    yellow = '\x1b[33m'
     reverse = '\x1b[7m'
     unreverse = '\x1b[27m'
 

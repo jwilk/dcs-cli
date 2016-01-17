@@ -162,7 +162,7 @@ def print_results(items):
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
         line = html.unescape(item['context'])
-        colors.print('{t.dim}>{t.off} {t.bold}{line}{t.off}', line=line)
+        colors.print('{t.dim}>{t.off} {t.bold}{t.yellow}{line}{t.off}', line=line)
         for line in item['ctxn1'], item['ctxn2']:
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
