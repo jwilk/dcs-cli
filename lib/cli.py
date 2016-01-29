@@ -27,6 +27,7 @@ command-line interface
 import argparse
 import html
 import json
+import os
 import re
 import sys
 import time
@@ -67,6 +68,7 @@ def main():
     ap.add_argument('--ignore-case', '-i', action='store_true')
     ap.add_argument('--word-regexp', '-w', action='store_true')
     ap.add_argument('--fixed-string', '-F', action='store_true')
+    ap.add_argument('--web-browser', '-W', action='store_true')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
@@ -82,8 +84,16 @@ def main():
     if options.ignore_case:
         query = '(?i)' + query
     query = ' '.join([query] + keywords)
+    if options.web_browser:
+        send_web_query(options, query)
+        return
     with pager.autopager():
         send_query(options, query)
+
+def send_web_query(options, query):
+    url = 'https://codesearch.debian.net/search?q=' + urllib.parse.quote_plus(query)
+    browser = 'sensible-browser'
+    os.execvp(browser, [browser, url])
 
 def wget_json(query_id, s):
     url = 'https://{host}/results/{qid}/{s}.json'.format(
