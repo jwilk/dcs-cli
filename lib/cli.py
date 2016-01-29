@@ -84,14 +84,18 @@ def main():
     if options.ignore_case:
         query = '(?i)' + query
     query = ' '.join([query] + keywords)
+    options.query = query
     if options.web_browser:
-        send_web_query(options, query)
+        send_web_query(options)
         return
     with pager.autopager():
-        send_query(options, query)
+        send_query(options)
 
-def send_web_query(options, query):
-    url = 'https://codesearch.debian.net/search?q=' + urllib.parse.quote_plus(query)
+def send_web_query(options):
+    url = (
+        'https://codesearch.debian.net/search?q=' +
+        urllib.parse.quote_plus(options.query)
+    )
     browser = 'sensible-browser'
     os.execvp(browser, [browser, url])
 
@@ -108,7 +112,8 @@ def wget_json(query_id, s):
     data = json.loads(data)
     return data
 
-def send_query(options, query):
+def send_query(options):
+    query = options.query
     colors.print('Query: {t.bold}{q}{t.off}', q=query)
     sys.stdout.flush()
     query = dict(Query=('q=' + urllib.parse.quote(query)))
