@@ -83,6 +83,7 @@ def main():
         query = r'\b{query}\b'.format(query=query)
     if options.ignore_case:
         query = '(?i)' + query
+    options.query_regexp = query
     query = ' '.join([query] + keywords)
     options.query = query
     if options.web_browser:
@@ -153,7 +154,7 @@ def send_query(options):
                     time.sleep(options.delay - td)
                 ts = new_ts
                 data = wget_json(query_id, 'page_{n}'.format(n=n))
-                print_results(data)
+                print_results(options, data)
             break
         elif tp == 'pagination':
             n_pages = msg['ResultPages']
@@ -170,14 +171,40 @@ def send_query(options):
         else:
             raise NotImplementedError(msg)
 
-def print_results(items):
+def xsplit(regex, string):
+    prev_end = 0
+    if isinstance(regex, str):
+        regex = re.compile(regex)
+    for match in regex.finditer(string):
+        start, end = match.span()
+        if start > prev_end:
+            yield string[prev_end:start], False
+        yield string[start:end], True
+        prev_end = end
+    if prev_end < len(string):
+        yield string[prev_end:], False
+
+def print_results(options, items):
+    query_regexp = options.query_regexp
+    try:
+        query_regexp = re.compile('({0})'.format(query_regexp))
+    except re.error:
+        query_regexp = re.compile(r'\Zx')  # never match anything
     for item in items:
         colors.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
         for line in item['ctxp2'], item['ctxp1']:
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
         line = html.unescape(item['context'])
-        colors.print('{t.dim}>{t.off} {t.bold}{t.yellow}{line}{t.off}', line=line)
+        template = '{t.dim}>{t.off} '
+        chunkdict = {}
+        for i, (chunk, matched) in enumerate(xsplit(query_regexp, line)):
+            chunkdict['l{0}'.format(i)] = chunk
+            template += '{t.bold}'
+            if matched:
+                template += '{t.yellow}'
+            template += '{l' + str(i) + '}{t.off}'
+        colors.print(template, **chunkdict)
         for line in item['ctxn1'], item['ctxn2']:
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
