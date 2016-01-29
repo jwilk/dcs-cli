@@ -65,10 +65,10 @@ def lsplit(pred, lst):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--ignore-case', '-i', action='store_true')
-    ap.add_argument('--word-regexp', '-w', action='store_true')
-    ap.add_argument('--fixed-string', '-F', action='store_true')
-    ap.add_argument('--web-browser', '-W', action='store_true')
+    ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
+    ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
+    ap.add_argument('--fixed-string', '-F', action='store_true', help='interpret pattern as fixed string')
+    ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
