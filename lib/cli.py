@@ -105,8 +105,12 @@ def wget_json(query_id, s):
         s=s,
     )
     request = urllib.request.Request(url, headers={'User-Agent': user_agent})
-    with urllib.request.urlopen(request) as fp:
-        data = fp.read()
+    try:
+        with urllib.request.urlopen(request) as fp:
+            data = fp.read()
+    except urllib.error.HTTPError as exc:
+        exc.msg += ' <' + exc.url + '>'
+        raise
     data = data.decode('UTF-8')
     data = json.loads(data)
     return data
