@@ -78,6 +78,8 @@ def main():
     if options.fixed_string:
         query = re.escape(query)
     if options.word_regexp:
+        if '|' in query:
+            query = '(?:{query})'.format(query=query)
         query = r'\b{query}\b'.format(query=query)
     if options.ignore_case:
         query = '(?i)' + query
