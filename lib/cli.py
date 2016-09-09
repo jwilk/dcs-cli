@@ -108,7 +108,7 @@ def wget_json(query_id, s):
     )
     request = urllib.request.Request(url, headers={'User-Agent': user_agent})
     try:
-        with urllib.request.urlopen(request) as fp:
+        with urllib.request.urlopen(request, cadefault=True) as fp:
             data = fp.read()
     except urllib.error.HTTPError as exc:
         exc.msg += ' <' + exc.url + '>'
