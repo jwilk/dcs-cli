@@ -36,6 +36,7 @@ import websocket
 
 from lib import colors
 from lib import pager
+from lib import somber
 
 host = 'codesearch.debian.net'
 user_agent = 'dcs-cli (https://github.com/jwilk/dcs-cli)'
@@ -67,6 +68,7 @@ def main():
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
     ap.add_argument('--fixed-string', '-F', action='store_true', help='interpret pattern as fixed string')
     ap.add_argument('--context', '-C', metavar='N', default=2, type=int, help='print N lines of output context (default: 2)')
+    ap.add_argument('--color', choices=('never', 'always', 'auto'), default='auto', help='when to use colors (default: auto)')
     ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
@@ -76,6 +78,10 @@ def main():
         options.context = 0
     elif options.context > 2:
         options.context = 2
+    if (options.color == 'always') or (options.color == 'auto' and sys.stdout.isatty()):
+        options.output = colors
+    else:
+        options.output = somber
     options.delay /= 1000
     query = [options.query] + options.query_tail
     [keywords, query] = lsplit(is_keyword, query)
@@ -124,7 +130,8 @@ def wget_json(query_id, s):
 
 def send_query(options):
     query = options.query
-    colors.print('Query: {t.bold}{q}{t.off}', q=query)
+    output = options.output
+    output.print('Query: {t.bold}{q}{t.off}', q=query)
     sys.stdout.flush()
     query = dict(Query=('q=' + urllib.parse.quote(query)))
     query = json.dumps(query)
@@ -144,13 +151,13 @@ def send_query(options):
                 continue
             query_id = msg['QueryId']
             n_results = msg['Results']
-            colors.print('Results: {n}', n=n_results)
+            output.print('Results: {n}', n=n_results)
             sys.stdout.flush()
             if n_results == 0:
                 break
             packages = wget_json(query_id, 'packages')['Packages']
             ts = time.time()
-            colors.print('Packages: {n} ({pkgs})',
+            output.print('Packages: {n} ({pkgs})',
                 n=len(packages),
                 pkgs=' '.join(packages),
             )
@@ -194,18 +201,19 @@ def xsplit(regex, string):
         yield string[prev_end:], False
 
 def print_results(options, items):
+    output = options.output
     query_regexp = options.query_regexp
     try:
         query_regexp = re.compile('({0})'.format(query_regexp))
     except re.error:
         query_regexp = re.compile(r'\Zx')  # never match anything
     for item in items:
-        colors.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
+        output.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
         context = [item['ctxp2'], item['ctxp1']]
         context = context[(2 - options.context):]
         for line in context:
             line = html.unescape(line)
-            colors.print('{t.dim}|{t.off} {line}', line=line)
+            output.print('{t.dim}|{t.off} {line}', line=line)
         line = html.unescape(item['context'])
         template = '{t.dim}>{t.off} '
         chunkdict = {}
@@ -215,13 +223,13 @@ def print_results(options, items):
             if matched:
                 template += '{t.yellow}'
             template += '{l' + str(i) + '}{t.off}'
-        colors.print(template, **chunkdict)
+        output.print(template, **chunkdict)
         context = item['ctxn1'], item['ctxn2']
         context = context[:options.context]
         for line in context:
             line = html.unescape(line)
-            colors.print('{t.dim}|{t.off} {line}', line=line)
-        colors.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
+            output.print('{t.dim}|{t.off} {line}', line=line)
+        output.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
             pathrank=item['pathrank'],
             rank=item['ranking'],
         )

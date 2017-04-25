@@ -1,4 +1,4 @@
-# Copyright © 2015 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2017 Jakub Wilk <jwilk@jwilk.net>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the “Software”), to deal
@@ -19,49 +19,22 @@
 # SOFTWARE.
 
 '''
-colorful text printing
+colorless text printing
 '''
 
 import builtins
-import re
 
 class _seq:
-    dim = '\x1b[1;30m'
-    off = '\x1b[0m'
-    bold = '\x1b[1m'
-    yellow = '\x1b[33m'
-    reverse = '\x1b[7m'
-    unreverse = '\x1b[27m'
-
-def _quote_unsafe_char(ch):
-    if ch == '\t':
-        return '{t.reverse}\t{t.unreverse}'.format(t=_seq)
-    elif ch < ' ' or ch == '\x7F':
-        return '{t.reverse}^{c}{t.unreverse}'.format(t=_seq, c=chr(ord('@') ^ ord(ch)))
-    else:
-        return '{t.reverse}<U+{u:04X}>{t.unreverse}'.format(t=_seq, u=ord(ch))
-
-def _quote_unsafe(s):
-    return ''.join(map(_quote_unsafe_char, s))
-
-def _quote(s):
-    if not isinstance(s, str):
-        return s
-    chunks = re.split(r'([\x00-\x1F\x7F-\x9F]+)', s)
-    def esc():
-        for i, s in enumerate(chunks):
-            if i & 1:
-                yield _quote_unsafe(s)
-            else:
-                yield s
-    return ''.join(esc())
+    dim = ''
+    off = ''
+    bold = ''
+    yellow = ''
+    reverse = ''
+    unreverse = ''
 
 def format(_s, **kwargs):
     kwargs.update(t=_seq)
-    return _s.format(**{
-        key: _quote(value)
-        for key, value in kwargs.items()
-    })
+    return _s.format(**kwargs)
 
 def print(_s='', **kwargs):
     builtins.print(format(_s, **kwargs))
