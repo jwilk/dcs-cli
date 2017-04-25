@@ -66,11 +66,16 @@ def main():
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
     ap.add_argument('--fixed-string', '-F', action='store_true', help='interpret pattern as fixed string')
+    ap.add_argument('--context', '-C', metavar='N', default=2, type=int, help='print N lines of output context (default: 2)')
     ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
     options = ap.parse_args()
+    if options.context < 0:
+        options.context = 0
+    elif options.context > 2:
+        options.context = 2
     options.delay /= 1000
     query = [options.query] + options.query_tail
     [keywords, query] = lsplit(is_keyword, query)
@@ -196,7 +201,9 @@ def print_results(options, items):
         query_regexp = re.compile(r'\Zx')  # never match anything
     for item in items:
         colors.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
-        for line in item['ctxp2'], item['ctxp1']:
+        context = [item['ctxp2'], item['ctxp1']]
+        context = context[(2 - options.context):]
+        for line in context:
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
         line = html.unescape(item['context'])
@@ -209,7 +216,9 @@ def print_results(options, items):
                 template += '{t.yellow}'
             template += '{l' + str(i) + '}{t.off}'
         colors.print(template, **chunkdict)
-        for line in item['ctxn1'], item['ctxn2']:
+        context = item['ctxn1'], item['ctxn2']
+        context = context[:options.context]
+        for line in context:
             line = html.unescape(line)
             colors.print('{t.dim}|{t.off} {line}', line=line)
         colors.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
