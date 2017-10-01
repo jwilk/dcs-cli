@@ -62,7 +62,14 @@ def lsplit(pred, lst):
             lno += [item]
     return (lyes, lno)
 
+def require_python(*version):
+    if sys.version_info < version:
+        version_str = '.'.join(map(str, version))
+        message = 'Python >= {0} is required'.format(version_str)
+        raise RuntimeError(message)
+
 def main():
+    require_python(3, 4)
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
