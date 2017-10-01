@@ -45,9 +45,9 @@ Prerequisites
 
 * Python ≥ 3.4
 
-* websocket_client_
+* websocket-client_
 
-.. _websocket_client:
-   https://pypi.python.org/pypi/websocket_client
+.. _websocket-client:
+   https://pypi.python.org/pypi/websocket-client
 
 .. vim:ft=rst ts=3 sts=3 sw=3 et
