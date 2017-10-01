@@ -1,0 +1,53 @@
+Example
+=======
+
+::
+
+   $ codesearch.debian.net -w '[0-9]*[2-9][1-3]th' filetype:perl
+   Query: \b[0-9]*[2-9][1-3]th\b filetype:perl
+   Results: 4
+   Packages: 4 (yudit libschedule-cron-events-perl libcatmandu-perl kanjipad)
+
+   libcatmandu-perl_1.0304-2/t/Catmandu-Fix-replace_all.t:19:
+   |
+   | is_deeply $pkg->new('date', '(\d{2})', '${1}th')->fix({date => "July 23"}),
+   >     {date => "July 23th"}, "interpolation works";
+   |
+   | is_deeply $pkg->new('words', '/b', '')->fix({words => "/bar"}),
+   (pathrank 2.1876, rank 2.2883)
+
+   kanjipad_2.0.0-8/jstroke/angles.pl:62:
+   | # ----- ang32 ----------------------------------------------------------------
+   | # For given int $xdif and $ydif, calculate atan2 (the angle from origin)
+   > # in 32th's of a circle from 0 to 32, rather than radians.  Note that it
+   | # returns 32 iff $xdif and $ydif are both zero, an ill-defined case.
+   | # Origin and direction are clockwise:
+   (pathrank 1.8235, rank 1.9284)
+
+   libschedule-cron-events-perl_1.95-1/lib/Schedule/Cron/Events.pm:338:
+   |       confess("Cron line [" . $self->{'initline'} . "] does not define any valid point in time, checked years: [" .
+   |           join(",", @{$self->{'set_e_checked_years'}}) .
+   >           "] (ex, 31th of February) ");
+   |     }
+   |   }
+   (pathrank 1.8234, rank 1.9179)
+
+   yudit_2.9.6-7/bin/angles.pl:62:
+   | # ----- ang32 ----------------------------------------------------------------
+   | # For given int $xdif and $ydif, calculate atan2 (the angle from origin)
+   > # in 32th's of a circle from 0 to 32, rather than radians.  Note that it
+   | # returns 32 iff $xdif and $ydif are both zero, an ill-defined case.
+   | # Origin and direction are clockwise:
+   (pathrank 2.0980, rank 2.2029)
+
+Prerequisites
+=============
+
+* Python ≥ 3.4
+
+* websocket_client_
+
+.. _websocket_client:
+   https://pypi.python.org/pypi/websocket_client
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
