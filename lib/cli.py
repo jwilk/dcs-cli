@@ -27,6 +27,7 @@ import html
 import json
 import os
 import re
+import signal
 import sys
 import time
 import urllib.parse
@@ -70,6 +71,7 @@ def require_python(*version):
 
 def main():
     require_python(3, 4)
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
