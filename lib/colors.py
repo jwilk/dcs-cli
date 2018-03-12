@@ -26,12 +26,12 @@ import builtins
 import re
 
 class _seq:
-    dim = '\x1b[1;30m'
-    off = '\x1b[0m'
-    bold = '\x1b[1m'
-    yellow = '\x1b[33m'
-    reverse = '\x1b[7m'
-    unreverse = '\x1b[27m'
+    dim = '\x1B[1;30m'
+    off = '\x1B[0m'
+    bold = '\x1B[1m'
+    yellow = '\x1B[33m'
+    reverse = '\x1B[7m'
+    unreverse = '\x1B[27m'
 
 def _quote_unsafe_char(ch):
     if ch == '\t':
