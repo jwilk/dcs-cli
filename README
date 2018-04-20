@@ -48,6 +48,6 @@ Prerequisites
 * websocket-client_
 
 .. _websocket-client:
-   https://pypi.python.org/pypi/websocket-client
+   https://pypi.org/project/websocket-client/
 
 .. vim:ft=rst ts=3 sts=3 sw=3 et
