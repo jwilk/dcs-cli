@@ -195,6 +195,7 @@ def send_query(options):
             continue
         else:
             raise NotImplementedError(msg)
+    socket.close()
 
 def xsplit(regex, string):
     prev_end = 0
