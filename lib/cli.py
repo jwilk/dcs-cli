@@ -127,8 +127,11 @@ def wget_json(query_id, s):
         s=s,
     )
     request = urllib.request.Request(url, headers={'User-Agent': user_agent})
+    ca_options = {}
+    if sys.version_info < (3, 4, 3):
+        ca_options.update(cadefault=True)
     try:
-        with urllib.request.urlopen(request, cadefault=True) as fp:
+        with urllib.request.urlopen(request, **ca_options) as fp:
             data = fp.read()
     except urllib.error.HTTPError as exc:
         exc.msg += ' <' + exc.url + '>'
