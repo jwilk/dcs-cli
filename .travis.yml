@@ -5,6 +5,7 @@ python:
 - "3.5"
 - "3.6"
 - "3.7"
+- "3.8-dev"
 cache: pip
 install:
 - python3 -m pip install websocket-client
