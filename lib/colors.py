@@ -26,7 +26,7 @@ import builtins
 import re
 
 class _seq:
-    dim = '\x1B[1;30m'
+    dim = '\x1B[90m'
     off = '\x1B[0m'
     bold = '\x1B[1m'
     yellow = '\x1B[33m'
