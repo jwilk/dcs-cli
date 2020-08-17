@@ -58,7 +58,7 @@ def _quote(s):
 
 def format(_s, **kwargs):
     kwargs.update(t=_seq)
-    return _s.format(**{
+    return _s.format_map({
         key: _quote(value)
         for key, value in kwargs.items()
     })

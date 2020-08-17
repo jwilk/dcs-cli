@@ -34,7 +34,7 @@ class _seq:
 
 def format(_s, **kwargs):
     kwargs.update(t=_seq)
-    return _s.format(**kwargs)
+    return _s.format_map(kwargs)
 
 def print(_s='', **kwargs):
     builtins.print(format(_s, **kwargs))
