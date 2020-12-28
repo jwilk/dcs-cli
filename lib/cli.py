@@ -70,7 +70,7 @@ def require_python(*version):
         raise RuntimeError(message)
 
 def main():
-    require_python(3, 4)
+    require_python(3, 4, 3)
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
@@ -127,11 +127,8 @@ def wget_json(query_id, s):
         s=s,
     )
     request = urllib.request.Request(url, headers={'User-Agent': user_agent})
-    ca_options = {}
-    if sys.version_info < (3, 4, 3):
-        ca_options.update(cadefault=True)
     try:
-        with urllib.request.urlopen(request, **ca_options) as fp:
+        with urllib.request.urlopen(request) as fp:
             data = fp.read()
     except urllib.error.HTTPError as exc:
         exc.msg += ' <' + exc.url + '>'
