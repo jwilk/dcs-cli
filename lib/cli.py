@@ -92,8 +92,8 @@ def main():
         query = re.escape(query)
     if options.word_regexp:
         if '|' in query:
-            query = '(?:{query})'.format(query=query)
-        query = r'\b{query}\b'.format(query=query)
+            query = f'(?:{query})'
+        query = fr'\b{query}\b'
     if options.ignore_case:
         query = '(?i)' + query
     options.query_regexp = query
@@ -139,7 +139,7 @@ def send_query(options):
     query = json.dumps(query)
     socket = websocket.WebSocket()
     socket.connect(
-        'wss://{host}/instantws'.format(host=host),
+        f'wss://{host}/instantws',
         header=['User-Agent: ' + user_agent]
     )
     socket.send(query)
@@ -171,7 +171,7 @@ def send_query(options):
                 if td < options.delay:
                     time.sleep(options.delay - td)
                 ts = new_ts
-                data = wget_json(query_id, 'page_{n}'.format(n=n))
+                data = wget_json(query_id, f'page_{n}')
                 print_results(options, data)
             break
         elif tp == 'pagination':
@@ -207,7 +207,7 @@ def print_results(options, items):
     output = options.output
     query_regexp = options.query_regexp
     try:
-        query_regexp = re.compile('({0})'.format(query_regexp))
+        query_regexp = re.compile(f'({query_regexp})')
     except re.error:
         query_regexp = re.compile(r'\Zx')  # never match anything
     for item in items:
@@ -221,7 +221,7 @@ def print_results(options, items):
         template = '{t.dim}>{t.off} '
         chunkdict = {}
         for i, (chunk, matched) in enumerate(xsplit(query_regexp, line)):
-            chunkdict['l{0}'.format(i)] = chunk
+            chunkdict[f'l{i}'] = chunk
             template += '{t.bold}'
             if matched:
                 template += '{t.yellow}'
