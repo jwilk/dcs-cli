@@ -63,14 +63,7 @@ def lsplit(pred, lst):
             lno += [item]
     return (lyes, lno)
 
-def require_python(*version):
-    if sys.version_info < version:
-        version_str = '.'.join(map(str, version))
-        message = 'Python >= {0} is required'.format(version_str)
-        raise RuntimeError(message)
-
 def main():
-    require_python(3, 4, 3)
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
