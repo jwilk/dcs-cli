@@ -35,11 +35,14 @@ class _seq:
 
 def _quote_unsafe_char(ch):
     if ch == '\t':
-        return '{t.reverse}\t{t.unreverse}'.format(t=_seq)
+        s = ch
     elif ch < ' ' or ch == '\x7F':
-        return '{t.reverse}^{c}{t.unreverse}'.format(t=_seq, c=chr(ord('@') ^ ord(ch)))
+        s = '^' + chr(ord('@') ^ ord(ch))
     else:
-        return '{t.reverse}<U+{u:04X}>{t.unreverse}'.format(t=_seq, u=ord(ch))
+        u = ord(ch)
+        s = f'<U+{u:04X}>'
+    t = _seq
+    return f'{t.reverse}{s}{t.unreverse}'
 
 def _quote_unsafe(s):
     return ''.join(map(_quote_unsafe_char, s))
