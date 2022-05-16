@@ -190,11 +190,11 @@ def send_query(options):
             raise NotImplementedError(msg)
     socket.close()
 
-def xsplit(regex, string):
+def xsplit(regexp, string):
     prev_end = 0
-    if isinstance(regex, str):
-        regex = re.compile(regex)
-    for match in regex.finditer(string):
+    if isinstance(regexp, str):
+        regexp = re.compile(regexp)
+    for match in regexp.finditer(string):
         start, end = match.span()
         if start > prev_end:
             yield string[prev_end:start], False
