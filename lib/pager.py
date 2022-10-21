@@ -39,7 +39,7 @@ def autopager():
         return
     env = None
     if 'LESS' not in os.environ:
-        env = dict(env or os.environ, LESS='FXR')
+        env = dict(env or os.environ, LESS='-FXR')
     if 'LV' not in os.environ:
         env = dict(env or os.environ, LV='-c')
     orig_stdout = sys.stdout
