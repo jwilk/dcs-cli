@@ -63,8 +63,7 @@ def lsplit(pred, lst):
             lno += [item]
     return (lyes, lno)
 
-def main():
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+def xmain():
     ap = argparse.ArgumentParser()
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
@@ -104,6 +103,14 @@ def main():
         return
     with pager.autopager():
         send_query(options)
+
+def main():
+    try:
+        xmain()
+    except BrokenPipeError:
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+        os.kill(os.getpid(), signal.SIGPIPE)
+        raise
 
 def send_web_query(options):
     url = (
