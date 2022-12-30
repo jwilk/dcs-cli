@@ -51,6 +51,7 @@ def autopager():
         try:
             sys.stdout = io.TextIOWrapper(pager.stdin,
                 encoding=orig_stdout.encoding,
+                errors=orig_stdout.errors,
             )
             try:
                 yield
