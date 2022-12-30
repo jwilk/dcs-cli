@@ -28,6 +28,9 @@ import os
 import subprocess as ipc
 import sys
 
+class Error(RuntimeError):
+    pass
+
 @contextlib.contextmanager
 def autopager():
     if not sys.stdout.isatty():
@@ -57,8 +60,11 @@ def autopager():
             pager.wait()
     finally:
         sys.stdout = orig_stdout
+    if pager.returncode:
+        raise Error
 
 __all__ = [
+    'Error',
     'autopager',
 ]
 
