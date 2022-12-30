@@ -55,8 +55,6 @@ def autopager():
                 sys.stdout.close()
         finally:
             pager.wait()
-    except BrokenPipeError:
-        sys.exit(1)
     finally:
         sys.stdout = orig_stdout
 
