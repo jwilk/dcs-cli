@@ -210,13 +210,19 @@ def xsplit(regexp, string):
     if prev_end < len(string):
         yield string[prev_end:], False
 
+def compile_query_regexp(query_regexp):
+    def repl(match):
+        (flags, main) = match.groups()
+        return f'{flags or ""}({main})'
+    regexp = re.sub(r'\A([(][?][^)]+[)])?(.*)\Z', repl, query_regexp, flags=re.DOTALL)
+    try:
+        return re.compile(regexp)
+    except re.error:
+        return re.compile(r'\Zx')  # never match anything
+
 def print_results(options, items):
     output = options.output
-    query_regexp = options.query_regexp
-    try:
-        query_regexp = re.compile(f'({query_regexp})')
-    except re.error:
-        query_regexp = re.compile(r'\Zx')  # never match anything
+    query_regexp = compile_query_regexp(options.query_regexp)
     for item in items:
         output.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
         context = [item['ctxp2'], item['ctxp1']]
