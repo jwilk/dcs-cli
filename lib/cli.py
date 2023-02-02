@@ -50,7 +50,7 @@ keyword_types = {
 }
 
 is_keyword = re.compile(
-    '^-?(?:{0}):'.format('|'.join(keyword_types))
+    '^-?(?:{0}):'.format(str.join('|', keyword_types))
 ).match
 
 def lsplit(pred, lst):
@@ -86,7 +86,7 @@ def xmain():
     options.delay /= 1000
     query = [options.query] + options.query_tail
     [keywords, query] = lsplit(is_keyword, query)
-    query = ' '.join(query)
+    query = str.join(' ', query)
     if options.fixed_string:
         query = re.escape(query)
     if options.word_regexp:
@@ -96,7 +96,7 @@ def xmain():
     if options.ignore_case:
         query = '(?i)' + query
     options.query_regexp = query
-    query = ' '.join([query] + keywords)
+    query = str.join(' ', [query] + keywords)
     options.query = query
     if options.web_browser:
         send_web_query(options)
@@ -168,7 +168,7 @@ def send_query(options):
             ts = time.time()
             output.print('Packages: {n} ({pkgs})',
                 n=len(packages),
-                pkgs=' '.join(packages),
+                pkgs=str.join(' ', packages),
             )
             print()
             sys.stdout.flush()

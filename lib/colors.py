@@ -43,7 +43,7 @@ def _quote_unsafe_char(ch):
     return f'{t.reverse}{s}{t.unreverse}'
 
 def _quote_unsafe(s):
-    return ''.join(map(_quote_unsafe_char, s))
+    return str.join('', map(_quote_unsafe_char, s))
 
 def _quote(s):
     if not isinstance(s, str):
@@ -55,7 +55,7 @@ def _quote(s):
                 yield _quote_unsafe(s)
             else:
                 yield s
-    return ''.join(esc())
+    return str.join('', esc())
 
 def format(_s, **kwargs):
     kwargs.update(t=_seq)
