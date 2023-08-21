@@ -29,6 +29,7 @@ import os
 import re
 import signal
 import sys
+import textwrap
 import time
 import urllib.parse
 import urllib.request
@@ -64,7 +65,7 @@ def lsplit(pred, lst):
     return (lyes, lno)
 
 def xmain():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
     ap.add_argument('--fixed-string', '-F', '-Q', action='store_true', help='interpret pattern as fixed string')
@@ -72,8 +73,15 @@ def xmain():
     ap.add_argument('--color', choices=('never', 'always', 'auto'), default='auto', help='when to use colors (default: auto)')
     ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
-    ap.add_argument('query', metavar='QUERY')
+    ap.add_argument('query', metavar='QUERY', help='regexp[1], optionally followed by KEY:VALUE filters[2]')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
+    ap.epilog = textwrap.dedent('''
+        [1] https://github.com/google/re2/raw/main/doc/syntax.txt
+        [2] * package:REGEXP, pkg:REGEXP - limit search to source packages matching REGEXP
+            * path:REGEXP - limit search to paths matching REGEXP
+            * filetype:LANGUAGE - limit search to files with extensions used by LANGUAGE:
+              c, c++, objc, objc++, perl, python, go, java, ruby, shell, vala, javascript, json
+    ''')
     options = ap.parse_args()
     if options.context < 0:
         options.context = 0
