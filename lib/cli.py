@@ -129,7 +129,12 @@ def send_web_query(options):
     for browser in 'sensible-browser', 'xdg-open':
         if shutil.which(browser):
             break
-    os.execvp(browser, [browser, url])
+    try:
+        os.execvp(browser, [browser, url])
+    except FileNotFoundError as exc:
+        if exc.filename is None:
+            exc.filename = browser
+        raise
 
 def wget_json(query_id, s):
     url = 'https://{host}/results/{qid}/{s}.json'.format(
