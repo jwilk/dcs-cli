@@ -27,6 +27,7 @@ import html
 import json
 import os
 import re
+import shutil
 import signal
 import sys
 import textwrap
@@ -125,7 +126,9 @@ def send_web_query(options):
         'https://codesearch.debian.net/search?q=' +
         urllib.parse.quote_plus(options.query)
     )
-    browser = 'sensible-browser'
+    for browser in 'sensible-browser', 'xdg-open':
+        if shutil.which(browser):
+            break
     os.execvp(browser, [browser, url])
 
 def wget_json(query_id, s):
