@@ -70,7 +70,7 @@ def xmain():
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
     ap.add_argument('--fixed-string', '-F', '-Q', action='store_true', help='interpret pattern as fixed string')
-    ap.add_argument('--context', '-C', metavar='N', default=2, type=int, help='print N lines of output context (default: 2)')
+    ap.add_argument('--context', '-C', metavar='N', default=2, type=int, choices=range(0,3), help='print N lines of output context (default: 2)')
     ap.add_argument('--color', choices=('never', 'always', 'auto'), default='auto', help='when to use colors (default: auto)')
     ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
