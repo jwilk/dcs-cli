@@ -29,6 +29,7 @@ class _seq:
     off = ''
     bold = ''
     yellow = ''
+    blue = ''
     reverse = ''
     unreverse = ''
 
