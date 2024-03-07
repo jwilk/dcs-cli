@@ -236,7 +236,9 @@ def print_results(options, items):
     output = options.output
     query_regexp = compile_query_regexp(options.query_regexp)
     for item in items:
-        output.print('{path}:{line}:', pkg=item['package'], path=item['path'], line=item['line'])
+        path = item['path']
+        lineno = int(item['line'])
+        output.print('{path}:{line}:', pkg=item['package'], path=path, line=lineno)
         context = [item['ctxp2'], item['ctxp1']]
         context = context[(2 - options.context):]
         for line in context:
