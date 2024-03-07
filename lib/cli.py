@@ -263,6 +263,9 @@ def print_results(options, items):
             pathrank=item['pathrank'],
             rank=item['ranking'],
         )
+        qpath = urllib.parse.quote_plus(path)
+        url = f'https://{host}/show?file={qpath}&line={lineno}#L{lineno}'
+        output.print('{t.blue}{url}{t.off}', url=url)
         print()
         sys.stdout.flush()
 
