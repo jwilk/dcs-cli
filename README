@@ -14,7 +14,6 @@ Example
    >     {date => "July 23th"}, "interpolation works";
    |
    | is_deeply $pkg->new('words', '/b', '')->fix({words => "/bar"}),
-   (pathrank 2.2090, rank 2.2965)
    https://codesearch.debian.net/show?file=libcatmandu-perl_1.2020-1%2Ft%2FCatmandu-Fix-replace_all.t&line=19#L19
 
    yudit_3.1.0-1/bin/angles.pl:62:
@@ -23,7 +22,6 @@ Example
    > # in 32th's of a circle from 0 to 32, rather than radians.  Note that it
    | # returns 32 iff $xdif and $ydif are both zero, an ill-defined case.
    | # Origin and direction are clockwise:
-   (pathrank 2.1169, rank 2.2080)
    https://codesearch.debian.net/show?file=yudit_3.1.0-1%2Fbin%2Fangles.pl&line=62#L62
 
    libschedule-cron-events-perl_1.96-2/lib/Schedule/Cron/Events.pm:340:
@@ -32,7 +30,6 @@ Example
    >           "] (ex, 31th of February) ");
    |     }
    |   }
-   (pathrank 1.8234, rank 1.9055)
    https://codesearch.debian.net/show?file=libschedule-cron-events-perl_1.96-2%2Flib%2FSchedule%2FCron%2FEvents.pm&line=340#L340
 
 Prerequisites

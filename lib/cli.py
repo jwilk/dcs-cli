@@ -259,10 +259,6 @@ def print_results(options, items):
         for line in context:
             line = html.unescape(line)
             output.print('{t.dim}|{t.off} {line}', line=line)
-        output.print('{t.dim}(pathrank {pathrank:.4f}, rank {rank:.4f}){t.off}',
-            pathrank=item['pathrank'],
-            rank=item['ranking'],
-        )
         qpath = urllib.parse.quote_plus(path)
         url = f'https://{host}/show?file={qpath}&line={lineno}#L{lineno}'
         output.print('{t.blue}{url}{t.off}', url=url)
