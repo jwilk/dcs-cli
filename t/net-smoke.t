@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright © 2022 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2022-2024 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
 set -e -u
