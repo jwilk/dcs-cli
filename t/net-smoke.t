@@ -7,7 +7,7 @@ set -e -u
 
 if [ -z "${DCS_CLI_NETWORK_TESTING-}" ]
 then
-    echo '1..0 # SKIP set DCS_CLI_NETWORK_TESTING=1 to enable tests that exercise network'
+    echo '1..0 # SKIP set DCS_CLI_NETWORK_TESTING=1 to opt in to network testing'
     exit 0
 fi
 
