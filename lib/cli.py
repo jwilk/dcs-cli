@@ -89,7 +89,7 @@ def xmain():
     else:
         options.output = somber
     options.delay /= 1000
-    query = [options.query] + options.query_tail
+    query = [options.query, *options.query_tail]
     [keywords, query] = lsplit(is_keyword, query)
     query = str.join(' ', query)
     if options.fixed_string:
@@ -101,7 +101,7 @@ def xmain():
     if options.ignore_case:
         query = '(?i)' + query
     options.query_regexp = query
-    query = str.join(' ', [query] + keywords)
+    query = str.join(' ', [query, *keywords])
     options.query = query
     if options.web_browser:
         send_web_query(options)
