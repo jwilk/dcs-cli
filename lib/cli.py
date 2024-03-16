@@ -133,11 +133,7 @@ def send_web_query(options):
         raise
 
 def wget_json(query_id, s):
-    url = 'https://{host}/results/{qid}/{s}.json'.format(
-        host=host,
-        qid=query_id,
-        s=s,
-    )
+    url = f'https://{host}/results/{query_id}/{s}.json'
     request = urllib.request.Request(url, headers={'User-Agent': user_agent})
     try:
         with urllib.request.urlopen(request) as fp:
