@@ -26,13 +26,13 @@ import builtins
 import re
 
 class _seq:
-    dim = '\x1B[90m'
-    off = '\x1B[0m'
-    bold = '\x1B[1m'
-    yellow = '\x1B[33m'
-    blue = '\x1B[34m'
-    reverse = '\x1B[7m'
-    unreverse = '\x1B[27m'
+    dim = '\33[90m'
+    off = '\33[0m'
+    bold = '\33[1m'
+    yellow = '\33[33m'
+    blue = '\33[34m'
+    reverse = '\33[7m'
+    unreverse = '\33[27m'
 
 def _quote_unsafe_char(ch):
     if ch < ' ' or ch == '\x7F':
