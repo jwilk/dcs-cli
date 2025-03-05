@@ -122,6 +122,9 @@ def send_web_query(options):
         'https://codesearch.debian.net/search?q=' +
         urllib.parse.quote_plus(options.query)
     )
+    if os.environ.get('BROWSER') == 'echo':
+        print(url)
+        return
     webbrowser.open(url)
 
 def wget_json(query_id, s):
