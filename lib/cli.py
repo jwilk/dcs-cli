@@ -73,6 +73,7 @@ def xmain():
     ap.add_argument('--context', '-C', metavar='N', default=2, type=int, choices=range(3), help='print N lines of output context (default: 2)')
     ap.add_argument('--color', choices=('never', 'always', 'auto'), default='auto', help='when to use colors (default: auto)')
     ap.add_argument('--web-browser', '-W', action='store_true', help='spawn a web browser')
+    ap.add_argument('--print-url', '-p', action='store_true', help='print URL and exit')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY', help='regexp[1], optionally followed by KEY:VALUE filters[2]')
     ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
@@ -103,6 +104,9 @@ def xmain():
     options.query_regexp = query
     query = str.join(' ', [query, *keywords])
     options.query = query
+    if options.print_url:
+        os.environ['BROWSER'] = 'echo'
+        options.web_browser = True
     if options.web_browser:
         send_web_query(options)
         return
