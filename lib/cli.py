@@ -27,13 +27,13 @@ import html
 import json
 import os
 import re
-import shutil
 import signal
 import sys
 import textwrap
 import time
 import urllib.parse
 import urllib.request
+import webbrowser
 
 import websocket
 
@@ -122,15 +122,7 @@ def send_web_query(options):
         'https://codesearch.debian.net/search?q=' +
         urllib.parse.quote_plus(options.query)
     )
-    for browser in 'sensible-browser', 'xdg-open':
-        if shutil.which(browser):
-            break
-    try:
-        os.execvp(browser, [browser, url])
-    except FileNotFoundError as exc:
-        if exc.filename is None:
-            exc.filename = browser
-        raise
+    webbrowser.open(url)
 
 def wget_json(query_id, s):
     url = f'https://{host}/results/{query_id}/{s}.json'
