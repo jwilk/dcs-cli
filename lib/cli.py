@@ -139,7 +139,7 @@ def wget_json(query_id, s):
         with urllib.request.urlopen(request) as fp:
             data = fp.read()
     except urllib.error.HTTPError as exc:
-        exc.msg += ' <' + exc.url + '>'
+        exc.msg += f' <{exc.url}>'
         raise
     data = data.decode('UTF-8')
     data = json.loads(data)
@@ -155,7 +155,7 @@ def send_query(options):
     socket = websocket.WebSocket()
     socket.connect(
         f'wss://{host}/instantws',
-        header=['User-Agent: ' + user_agent]
+        header=[f'User-Agent: {user_agent}']
     )
     socket.send(query)
     n_pages = None
