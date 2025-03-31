@@ -149,7 +149,7 @@ def send_query(options):
     output = options.output
     output.print('Query: {t.bold}{q}{t.off}', q=query)
     sys.stdout.flush()
-    query = dict(Query=('q=' + urllib.parse.quote(query)))
+    query = dict(Query=('q=' + urllib.parse.quote(query, safe='')))
     query = json.dumps(query)
     socket = websocket.WebSocket()
     socket.connect(
