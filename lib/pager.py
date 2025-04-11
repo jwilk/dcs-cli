@@ -37,7 +37,7 @@ def autopager():
         yield
         return
     cmdline = os.environ.get('PAGER', 'pager')
-    if cmdline == 'cat':
+    if cmdline in {'', 'cat'}:
         yield
         return
     env = None
