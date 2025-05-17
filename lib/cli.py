@@ -76,7 +76,7 @@ def xmain():
     ap.add_argument('--print-url', '-p', action='store_true', help='print URL and exit')
     ap.add_argument('--delay', default=200, type=int, help='minimum time between requests, in ms (default: 200)')
     ap.add_argument('query', metavar='QUERY', help='regexp[1], optionally followed by KEY:VALUE filters[2]')
-    ap.add_argument('query_tail', nargs='*', help=argparse.SUPPRESS)
+    ap.add_argument('query_tail', metavar='QUERY-TAIL', nargs='*', help=argparse.SUPPRESS)
     ap.epilog = textwrap.dedent('''
         [1] https://github.com/google/re2/raw/main/doc/syntax.txt
         [2] * package:REGEXP, pkg:REGEXP - limit search to source packages matching REGEXP
