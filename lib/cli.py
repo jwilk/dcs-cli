@@ -67,6 +67,7 @@ def lsplit(pred, lst):
 
 def xmain():
     ap = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.color = False
     ap.add_argument('--ignore-case', '-i', action='store_true', help='ignore case distinctions')
     ap.add_argument('--word-regexp', '-w', action='store_true', help='match only whole words')
     ap.add_argument('--fixed-string', '-F', '-Q', action='store_true', help='interpret pattern as fixed string')
